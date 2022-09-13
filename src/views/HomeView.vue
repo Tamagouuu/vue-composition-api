@@ -1,33 +1,43 @@
 <template>
   <div class="home">
-    <h1>This is {{ page }}</h1>
-    <h3>Welcome {{ name }}, your age must be {{ age }}</h3>
-    <button @click="age++">Click this, if you want go older 👴</button>
-    <p>Hi i am paragraph text</p>
-    <input type="text" v-model="name" />
-    <button @click="handleClick">Click me plz !</button>
+    <h1>Home</h1>
+    <div>
+      <h1>Orang Pertama</h1>
+      <p>Nama : {{ orangPertama.name }}</p>
+      <p>Umur : {{ orangPertama.age }}</p>
+    </div>
+    <div>
+      <h1>Orang Kedua</h1>
+      <p>Nama : {{ orangKedua.name }}</p>
+      <p>Umur : {{ orangKedua.age }}</p>
+    </div>
+    <p>{{ alamat }}</p>
+    <button @click="ubahOrangPertama">Ubah nama orang pertama bang</button>
+    <button @click="ubahOrangKedua">Ubah nama orang kedua bang</button>
   </div>
 </template>
 
 <script>
-import { ref } from "@vue/reactivity";
+import { reactive, ref } from "@vue/reactivity";
 export default {
   setup() {
-    let page = ref("Homepage");
-    let name = ref("Gautama");
+    // In our mind may think why we dont use just reactivity instead using ref. Ref look so terible, when we want to access the value of the property we must access the value property first and then we got the value. If we use reactive we just need write the variable name only. But the reactivity has drawback, if we use reactivity we cant assign the primitif value inside of the variable. The things gonna be clear if we see the example below :
 
-    // let p = ref(null);
+    let orangPertama = ref({ name: "Gautama", age: 17 });
+    let orangKedua = reactive({ name: "Rama", age: 20 });
 
-    // As we know before that ref's is used to refrence some element in html which mean the usage of ref is limited, but in composition api we use ref for reactivity too, because in setup life cycle we dont have this for refrence our component and if we wanted to change the value of the property it will be doesnt work like what we expected when we use option api, so we use ref for the reactivity. But one thing that you should do when you use ref as reactivity value, if we want to access the value of the property we must add .value property to access the actual value, but if we access the property from template we just need to write the property name. (I think it's the same case like we use property in option API when we want to reffering property we use keyword this before the property name)
+    let alamat = reactive("Jl. Kenari No. 27");
 
-    let age = ref(17);
-
-    const handleClick = () => {
-      // p.value.innerText = "You just clicked me :p";
-      name.value = "Tama";
+    const ubahOrangPertama = () => {
+      orangPertama.value.name = "Tama";
     };
 
-    return { page, name, handleClick, age };
+    const ubahOrangKedua = () => {
+      orangKedua.name = "Amar";
+      // alamat = "Jl. ASemloHoy No. 28"; // cannot do this brow // Kalau mau ganti value reactive maka yang boleh diassign di dalam function reactive ini adalah object, bukan data primitive seperti diatas begitu everybody.
+    };
+
+    return { orangPertama, orangKedua, ubahOrangPertama, ubahOrangKedua, alamat };
   },
 };
 </script>
